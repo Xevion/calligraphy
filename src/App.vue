@@ -6,21 +6,21 @@
                     <span class="md-title">Calligraphy</span>
                 </md-app-toolbar>
 
-                <md-app-drawer md-persistent="mini" md-permanent="clipped">
-                    <md-list style="height: 100%">
-                        <md-list-item @click="toggleMenu">
+                <md-app-drawer :md-active.sync="menuVisible" md-persistent="mini" md-permanent="clipped">
+                    <md-list>
+                        <md-list-item @click="$refs.fontSelector.toggle()" title="Show PDF Preview">
                             <md-icon>visibility</md-icon>
                         </md-list-item>
 
-                        <md-list-item @click="toggleMenu">
+                        <md-list-item @click="showSettings" title="Show PDF Settings">
                             <md-icon>create</md-icon>
                         </md-list-item>
 
-                        <md-list-item @click="toggleMenu">
+                        <md-list-item @click="showStylizer" title="Show PDF Style Settings">
                             <md-icon>colorize</md-icon>
                         </md-list-item>
 
-                        <md-list-item @click="toggleMenu" style="margin-top: auto">
+                        <md-list-item @click="showAbout" title="About this App" style="margin-top: auto">
                             <md-icon>help</md-icon>
                         </md-list-item>
                     </md-list>
@@ -30,7 +30,7 @@
                     <div class="md-layout md-center md-alignment-center-space-between">
                         <div class="md-layout-item md-size-50">
                             <md-field>
-                                <label for="fonturl">Font URL</label>
+                                <label>Font URL</label>
                                 <md-input id="fonturl" v-model="fontURL"></md-input>
                             </md-field>
                         </div>
@@ -54,6 +54,7 @@
                             </md-card>
                         </div>
                     </div>
+                    <FontSelector ref="fontSelector"></FontSelector>
                 </md-app-content>
             </md-app>
         </div>
@@ -68,7 +69,7 @@ body, html {
     text-align: center;
 }
 
-body, #app, .page-container, .md-app {
+body, #app, .page-container, .md-app, .md-list {
     height: 100%;
 }
 
@@ -79,24 +80,16 @@ body, #app, .page-container, .md-app {
 .md-list-item-content > .md-icon:last-child {
     margin-left: 0 !important;
 }
-
-#font-data {
-    padding: 0 2em;
-    white-space: pre-wrap; /* css-3 */
-    white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
-    white-space: -pre-wrap; /* Opera 4-6 */
-    white-space: -o-pre-wrap; /* Opera 7 */
-    word-wrap: break-word; /* Internet Explorer 5.5+ */
-}
 </style>
 
 <script>
 import jsPDF from 'jspdf'
 import axios from 'axios';
+import FontSelector from "./components/FontSelector";
 
 export default {
     name: 'App',
-    components: {},
+    components: {FontSelector},
     data() {
         return {
             fontURL: "https://themes.googleusercontent.com/static/fonts/anonymouspro/v3/WDf5lZYgdmmKhO8E1AQud--Cz_5MeePnXDAcLNWyBME.ttf",
@@ -109,11 +102,9 @@ export default {
         toggleMenu() {
             this.menuVisible = !this.menuVisible
         },
-        getFonts() {
-            this.directAxios.get({
-                url: `https://www.googleapis.com/webfonts/v1/webfonts?key=${process.env.FONT_API_KEY}`
-            })
-        },
+        showSettings() {},
+        showStylizer() {},
+        showAbout() {},
         createPDF() {
             var doc = new jsPDF();
 
