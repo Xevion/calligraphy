@@ -7,12 +7,15 @@
                         <md-field>
                             <label>Font Family</label>
                             <md-input v-model="search"></md-input>
+                            <span class="md-suffix">{{ results.length }}</span>
                         </md-field>
                     </div>
-                    <md-list class="md-scrollbar">
-                        <md-list-item v-for="font in results" @click="selectFont(font.index)" :key="font.family">
-                            {{ font.family }}
-                        </md-list-item>
+                    <md-list>
+                        <vue-custom-scrollbar :settings="{suppressScrollX: true,  suppressScrollY: false}" class="scroll-area">
+                            <md-list-item v-for="font in results" @click="selectFont(font.index)" :key="font.family">
+                                {{ font.family }}
+                            </md-list-item>
+                        </vue-custom-scrollbar>
                     </md-list>
                 </md-content>
 
@@ -22,7 +25,7 @@
                 </md-dialog-actions>
             </div>
             <div v-else id="spinner-box" :style="[fonts !== null ? 'display: none' : null]">
-                <md-progress-spinner md-stroke=5 md-diameter=45 md-mode="indeterminate"></md-progress-spinner>
+                <md-progress-spinner :md-stroke="5" :md-diameter="45" md-mode="indeterminate"></md-progress-spinner>
             </div>
         </md-dialog>
     </div>
@@ -41,14 +44,23 @@
         -ms-transform: translate(-50%, -50%);
         transform: translate(-50%, -50%);
     }
-}
 
-#font-dialog.md-dialog > .md-dialog-container {
-    min-height: 9em;
-}
+    &.md-dialog > .md-dialog-container {
+        min-height: 15em;
+    }
 
-#font-dialog .md-progress-spinner {
-    align-content: center;
+    .md-progress-spinner {
+        align-content: center;
+    }
+
+    .md-list {
+        max-height: 15em;
+        //overflow: auto;
+    }
+
+    .scroll-area {
+        position: relative;
+    }
 }
 
 .md-menu-content {
@@ -58,15 +70,19 @@
 
 <script>
 import axios from 'axios';
+import vueCustomScrollbar from 'vue-custom-scrollbar'
 
 axios.baseURL = '';
 
 export default {
     name: "FontSelector",
+    components: {
+        vueCustomScrollbar
+    },
     data: () => ({
         fonts: null,
         visible: false,
-        search: null,
+        search: "",
         selectedFont: null
     }),
     methods: {
