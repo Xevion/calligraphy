@@ -7,7 +7,7 @@
                         <md-field>
                             <label>Font Family</label>
                             <md-input v-model="search"></md-input>
-                            <span class="md-suffix">{{ results.length }} ({{ shown.length }})</span>
+                            <span class="md-suffix">{{ animatedResults }}</span>
                         </md-field>
                     </div>
                     <md-list>
@@ -67,6 +67,10 @@
     .scroll-area {
         position: relative;
     }
+
+    .md-field {
+        margin-top: 0.25em;
+    }
 }
 
 .md-menu-content {
@@ -78,6 +82,7 @@
 import axios from 'axios';
 import InfiniteLoading from 'vue-infinite-loading';
 import vueCustomScrollbar from 'vue-custom-scrollbar'
+import { gsap } from "gsap";
 
 axios.baseURL = '';
 
@@ -92,7 +97,8 @@ export default {
         visible: false,
         shown: [],
         search: "",
-        selectedFont: null
+        selectedFont: null,
+        tweenedResults: 0,
     }),
     methods: {
         toggle() {
@@ -137,6 +143,9 @@ export default {
                     return this.fonts.items
             else
                 return []
+        },
+        animatedResults() {
+            return this.tweenedResults.toFixed(0);
         }
     },
     watch: {
@@ -150,6 +159,9 @@ export default {
                     let min = this.shown.length;
                     this.shown = this.results.slice(0, Math.min(min, 5) + 1);
                 }
+        },
+        results: function (newValue) {
+            gsap.to(this.$data, {duration: 0.35, tweenedResults: newValue.length, ease: "power4"});
         }
     }
 }
