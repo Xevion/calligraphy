@@ -9,6 +9,16 @@
                             <md-input v-model="search"></md-input>
                             <span class="md-suffix">{{ animatedResults }}</span>
                         </md-field>
+                        <md-field>
+                            <label for="sort">Sort by</label>
+                            <md-select v-model="sort" name="sort" id="sort">
+                                <md-option value="alpha">Alphabetically</md-option>
+                                <md-option value="date">Date Updated</md-option>
+                                <md-option value="popularity">Popularity</md-option>
+                                <md-option value="style">Styles</md-option>
+                                <md-option value="trending">Trending</md-option>
+                            </md-select>
+                        </md-field>
                     </div>
                     <md-list>
                         <vue-custom-scrollbar :distance="20"
@@ -17,7 +27,7 @@
                             <md-list-item v-for="font in shown" @click="selectFont(font.index)" :key="font.index">
                                 {{ font.family }}
                             </md-list-item>
-                            <infinite-loading :identifier="search" force-use-infinite-wrapper=".scroll-area"
+                            <infinite-loading :identifier="search + sort" force-use-infinite-wrapper=".scroll-area"
                                               @infinite="infiniteHandler">
                                 <div slot="spinner"></div>
                                 <div slot="no-more"></div>
@@ -82,7 +92,7 @@
 import axios from 'axios';
 import InfiniteLoading from 'vue-infinite-loading';
 import vueCustomScrollbar from 'vue-custom-scrollbar'
-import { gsap } from "gsap";
+import {gsap} from "gsap";
 
 axios.baseURL = '';
 
@@ -99,6 +109,7 @@ export default {
         search: "",
         selectedFont: null,
         tweenedResults: 0,
+        sort: 'popularity',
     }),
     methods: {
         toggle() {
@@ -124,7 +135,7 @@ export default {
         },
         getFonts() {
             axios.get(
-                `https://www.googleapis.com/webfonts/v1/webfonts?key=${process.env.VUE_APP_FONT_API_KEY}`
+                `https://www.googleapis.com/webfonts/v1/webfonts?key=${process.env.VUE_APP_FONT_API_KEY}&sort=${this.sort}`
             ).then((res) => {
                 this.fonts = res.data;
                 this.fonts.items.forEach((font, index) => font.index = index)
@@ -149,6 +160,10 @@ export default {
         }
     },
     watch: {
+        sort: function() {
+            this.shown = [];
+            this.getFonts();
+        },
         search: function (newSearch, oldSearch) {
             if (newSearch.length !== oldSearch.length)
                 if (newSearch.length > oldSearch.length)
@@ -161,7 +176,7 @@ export default {
                 }
         },
         results: function (newValue) {
-            gsap.to(this.$data, {duration: 0.35, tweenedResults: newValue.length, ease: "power4"});
+            gsap.to(this.$data, {duration: 0.4, tweenedResults: newValue.length, ease: "power4"});
         }
     }
 }
