@@ -6,34 +6,22 @@
                     <span class="md-title">Calligraphy</span>
                 </md-app-toolbar>
 
-                <md-app-drawer :md-active.sync="menuVisible" md-persistent="mini" md-permanent="clipped">
-                    <md-toolbar class="md-transparent" md-elevation="0">
-                        <span>Navigation</span>
-                    </md-toolbar>
-
-                    <md-list>
-                        <md-list-item>
-<!--                            <md-button class="md-icon-button" @click="toggleMenu">-->
-                                <md-icon>move_to_inbox</md-icon>
-<!--                            </md-button>-->
+                <md-app-drawer md-persistent="mini" md-permanent="clipped">
+                    <md-list style="height: 100%">
+                        <md-list-item @click="toggleMenu">
+                            <md-icon>visibility</md-icon>
                         </md-list-item>
 
-                        <md-list-item>
-                            <md-button class="md-icon-button" @click="toggleMenu">
-                                <md-icon>send</md-icon>
-                            </md-button>
+                        <md-list-item @click="toggleMenu">
+                            <md-icon>create</md-icon>
                         </md-list-item>
 
-                        <md-list-item>
-                            <md-button class="md-icon-button" @click="toggleMenu">
-                                <md-icon>delete</md-icon>
-                            </md-button>
+                        <md-list-item @click="toggleMenu">
+                            <md-icon>colorize</md-icon>
                         </md-list-item>
 
-                        <md-list-item>
-                            <md-button class="md-icon-button" @click="toggleMenu">
-                                <md-icon>error</md-icon>
-                            </md-button>
+                        <md-list-item @click="toggleMenu" style="margin-top: auto">
+                            <md-icon>help</md-icon>
                         </md-list-item>
                     </md-list>
                 </md-app-drawer>
@@ -86,6 +74,10 @@ body, #app, .page-container, .md-app {
 
 .hljs {
     background-color: transparent !important;
+}
+
+.md-list-item-content > .md-icon:last-child {
+    margin-left: 0 !important;
 }
 
 #font-data {
