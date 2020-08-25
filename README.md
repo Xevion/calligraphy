@@ -18,6 +18,11 @@ generated sheets on the fly.
     - Guideline Opacity
     - Guideline Color
     - Guideline Style
+    
+## Method
+
+Vue.js is used to manage all of the UI. Material Design is the CSS framework used to design this
+web application. 
 
 ## Local Deployment
 
