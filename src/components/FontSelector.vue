@@ -21,10 +21,10 @@
                         </md-field>
                     </div>
                     <md-list>
-                        <vue-custom-scrollbar :distance="20"
+                        <vue-custom-scrollbar :distance="10"
                                               :settings="{suppressScrollX: true,  suppressScrollY: false}"
                                               class="scroll-area">
-                            <FontItem v-for="font in shown" :key="font.index" :font="font"></FontItem>
+                            <FontItem v-for="font in shown" :key="font.index" @select-font="selectFont" :selected="selectedFont !== null && selectedFont.index === font.index" :font="font"></FontItem>
                             <infinite-loading :identifier="search + sort" force-use-infinite-wrapper=".scroll-area"
                                               @infinite="infiniteHandler">
                                 <div slot="spinner"></div>
@@ -139,6 +139,7 @@ export default {
             ).then((res) => {
                 this.fonts = res.data;
                 this.fonts.items.forEach((font, index) => font.index = index)
+                this.shown = this.results.slice(0, 5);
             })
         },
         selectFont(fontIndex) {
@@ -161,7 +162,6 @@ export default {
     },
     watch: {
         sort: function() {
-            this.shown = [];
             this.getFonts();
         },
         search: function (newSearch, oldSearch) {

@@ -99,27 +99,27 @@ export default {
         }
     },
     methods: {
-        toggleMenu() {
-            this.menuVisible = !this.menuVisible
-        },
         showSettings() {},
         showStylizer() {},
         showAbout() {},
         createPDF() {
             var doc = new jsPDF();
 
+            // Load font if not already
             if (!this.fontData)
                 this.loadFile(this.fontURL)
 
-            console.log(this.fontData)
-
+            // Adding font
             doc.addFileToVFS('antic.ttf', this.fontData);
             doc.addFont('antic.ttf', 'Antic', 'regular')
             doc.setFont('Antic', 'regular');
             doc.setFontSize(15);
+
+            // Add text
             doc.text("Some Text with Google Fonts", 5, 10);
             doc.save('test.pdf');
         },
+
         loadFile(fontURL) {
             this.directAxios.get(fontURL, {
                 responseType: "blob"
