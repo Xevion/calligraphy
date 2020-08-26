@@ -77,7 +77,7 @@
     }
 
     .md-field {
-        margin-top: 0.6em;
+        margin-top: 0.75em;
     }
 }
 
