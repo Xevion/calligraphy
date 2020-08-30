@@ -24,9 +24,7 @@
                         <vue-custom-scrollbar :distance="20"
                                               :settings="{suppressScrollX: true,  suppressScrollY: false}"
                                               class="scroll-area">
-                            <md-list-item v-for="font in shown" @click="selectFont(font.index)" :key="font.index">
-                                {{ font.family }}
-                            </md-list-item>
+                            <FontItem v-for="font in shown" :key="font.index" :font="font"></FontItem>
                             <infinite-loading :identifier="search + sort" force-use-infinite-wrapper=".scroll-area"
                                               @infinite="infiniteHandler">
                                 <div slot="spinner"></div>
@@ -90,6 +88,7 @@
 
 <script>
 import axios from 'axios';
+import FontItem from "@/components/FontItem";
 import InfiniteLoading from 'vue-infinite-loading';
 import vueCustomScrollbar from 'vue-custom-scrollbar'
 import {gsap} from "gsap";
@@ -101,6 +100,7 @@ export default {
     components: {
         vueCustomScrollbar,
         InfiniteLoading,
+        FontItem
     },
     data: () => ({
         fonts: null,
